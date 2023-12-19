@@ -191,7 +191,7 @@ int main() {
         insertFromDb(root, new);
     }
 
-    inorder(root);
+    game(root);
 
     fclose(db);
     return 0;
