@@ -95,18 +95,6 @@ void insertFromDb(TREE* elem, TREE* new) {
 }
 
 
-// print tree from min len to max len of elements in the tree
-void inorder(TREE *elem) {
-    if (elem -> no) 
-        inorder(elem -> no);
-
-    printf("%s\n", elem -> value);
-
-    if (elem -> yes)
-        inorder(elem -> yes);
-}
-
-
 // remove incorrect answer and add correct one from user
 void idk(TREE* elem, int yesNo) {
     char new[MAX_LEN_STR], ans[MAX_LEN_STR] = "Answer: ";
@@ -180,8 +168,6 @@ int main() {
     fgets(string, sizeof(string), db);
     TREE* root = createNode(line, type, string);
     
-    inorder(root);
-    
     while(!feof(db)) {
         if (string[0] != (fgets(string, sizeof(string), db))[0])
             type++;
@@ -192,7 +178,6 @@ int main() {
     }
 
     game(root);
-
     fclose(db);
     return 0;
 }
