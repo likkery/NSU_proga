@@ -8,7 +8,6 @@
 
 TREE {
     int value;
-    int height;
     TREE* left;
     TREE* right;
 };
@@ -18,13 +17,8 @@ TREE {
 int getHeight(TREE* tree) {
     if (tree == NULL)
         return 0;
-    return tree -> height;
-}
 
-
-// set relevant height
-void setHeight(TREE *tree) {
-    tree -> height = MAX(getHeight(tree -> left), getHeight(tree -> right)) + 1;
+    return MAX(getHeight(tree -> left), getHeight(tree -> right)) + 1;
 }
 
 
@@ -41,9 +35,6 @@ TREE *leftRotate(TREE *tree) {
     tree -> right = fix -> left;
     fix -> left = tree;
 
-    setHeight(tree);
-    setHeight(fix);
-
     return fix;
 }
 
@@ -55,17 +46,12 @@ TREE *rightRotate(TREE *tree) {
     tree -> left = fix -> right;
     fix -> right = tree;
 
-    setHeight(tree);
-    setHeight(fix);
-
     return fix;
 }
 
 
 // balancing AVL tree
 TREE *balance(TREE *tree) {
-    setHeight(tree);
-
     // doing left rotate or big left rotate
     if (balanceFactor(tree) == 2) {
         if (balanceFactor(tree -> right) < 0)
@@ -89,7 +75,6 @@ TREE* create(int value) {
     TREE* node = (TREE*)malloc(sizeof(TREE));
 
     node -> value = value;
-    node -> height = 1;
     node -> right = NULL;
     node -> left = NULL;
 
@@ -120,10 +105,38 @@ void deleteTree(TREE *tree) {
     }
 }
 
+// symmetric output
+void inorderPrint(TREE *tree) {
+    if (tree == NULL)
+        return;
+    
+    inorderPrint(tree -> left);
+    printf("%d", tree -> value);
+    inorderPrint(tree -> right);
+}
+
+
+// search element by it's value
+int search(TREE *tree, int val) {
+    if (tree == NULL) {
+        printf("Element doesn't exist");
+        return 0;
+    }
+    
+    if (tree -> value == val)
+        printf("Element was found");
+    else if (tree -> value < val)
+        search(tree -> right, val);
+    else 
+        search(tree -> left, val);
+
+    return 1;
+}
+
 
 int main() {
     TREE* node = NULL;
-    int value, amount;
+    int value, amount, forSearch;
 
     scanf("%d", &amount);
 
