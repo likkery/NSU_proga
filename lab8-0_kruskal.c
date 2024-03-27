@@ -50,7 +50,7 @@ GRAPH *create(GRAPH *edge, int edgeCnt, int nodeCnt) {
     int flag = 0, lines = 0;
 
     for (lines; lines < edgeCnt; lines++) {
-        if (scanf("%d %d %lld", &edge[lines].start, &edge[lines].end, 
+        if (scanf("%d %d %lld", &edge[lines].start, &edge[lines].end,
         &edge[lines].weight) != 3) {
             printf("bad number of lines");
             exit(0);
@@ -58,9 +58,12 @@ GRAPH *create(GRAPH *edge, int edgeCnt, int nodeCnt) {
 
         if (checkEdge(edge[lines], nodeCnt))
             exit(0);
-        
+
         if (edge[lines].end == nodeCnt || edge[lines].start == nodeCnt)
-            flag++; 
+            flag++;
+
+        edge[lines].start--;
+        edge[lines].end--;
     }
 
     if (flag == 0 && nodeCnt != 1){
@@ -94,7 +97,7 @@ void kruskal(GRAPH* edge, int edgeCnt, int nodeCnt){
     *parents = (int*)malloc(nodeCnt * sizeof(int));
     GRAPH* frame = (GRAPH*)malloc(nodeCnt * sizeof(GRAPH));
     qsort(edge, edgeCnt, sizeof(GRAPH), edgeCompare);
-    
+
     for (int i = 0; i < nodeCnt; i++)
         parents[i] = -1;
 
@@ -114,9 +117,9 @@ void kruskal(GRAPH* edge, int edgeCnt, int nodeCnt){
     else
         for (int i = 0; i < nodeCnt - 1; i++) {
             if (frame[i].start < frame[i].end)
-                printf("%d %d\n", frame[i].start, frame[i].end);
-            else   
-                printf("%d %d\n", frame[i].end, frame[i].start);
+                printf("%d %d\n", frame[i].start + 1, frame[i].end + 1);
+            else
+                printf("%d %d\n", frame[i].end + 1, frame[i].start + 1);
         }
 
     free(parents);
@@ -127,7 +130,7 @@ void kruskal(GRAPH* edge, int edgeCnt, int nodeCnt){
 int main() {
     int nodeCnt, edgeCnt, edgeLen;
     GRAPH *edge = NULL;
-    
+
     scanf("%d", &nodeCnt);
     scanf("%d", &edgeCnt);
 
