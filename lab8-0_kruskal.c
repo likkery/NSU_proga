@@ -89,6 +89,35 @@ int check(int nodeCnt, int edgeCnt){
 
     return 0;
 }
+// swap nodes
+void swap (GRAPH *a, GRAPH *b) {
+    GRAPH c = *a;
+    *a = *b;
+    *b = c;
+}
+// partition for quicksort
+int partition (GRAPH* arr, int low, int hight) {
+    int mid = arr[(low + hight) / 2].weight;
+    int i = low, j = hight;
+    while (1) {
+        while (arr[i].weight < mid)
+            i++;
+        while (arr[j].weight > mid)
+            j--;
+        if (i >= j) {
+            return j;
+        }
+        swap(&arr[i++], &arr[j--]);
+    }
+}
+
+void quicksort (GRAPH* arr, int low, int hight) {
+    if (low < hight) {
+        int part = partition(arr, low, hight);
+        quicksort(arr, low, part);
+        quicksort(arr, part + 1, hight);
+    }
+}
 
 
 // kruskal algoritm
@@ -96,7 +125,7 @@ void kruskal(GRAPH* edge, int edgeCnt, int nodeCnt){
     int edges = 0, start, end,
     *parents = (int*)malloc(nodeCnt * sizeof(int));
     GRAPH* frame = (GRAPH*)malloc(nodeCnt * sizeof(GRAPH));
-    qsort(edge, edgeCnt, sizeof(GRAPH), edgeCompare);
+    quicksort(edge, 0, edgeCnt - 1);
 
     for (int i = 0; i < nodeCnt; i++)
         parents[i] = -1;
