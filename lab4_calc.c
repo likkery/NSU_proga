@@ -217,9 +217,9 @@ char popOper(OPER **head) {
     
     value = remove -> value;
     *head = remove -> next;
-e(remove);
+
     return value;
-    fre
+    free(remove);
 }
 
 char takeOper(OPER **head) {
