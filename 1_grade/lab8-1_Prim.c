@@ -9,7 +9,7 @@
 GRAPH{
     int nodeCnt;
     int edgeCnt;
-    long long int *weight;
+    unsigned int *weight;
 };
 
 
@@ -54,8 +54,8 @@ GRAPH *create(GRAPH *graph, int edgeCnt, int nodeCnt) {
 
     graph->edgeCnt = edgeCnt;
     graph->nodeCnt = nodeCnt;
-    graph->weight = (long long int*)calloc(nodeCnt * nodeCnt, 
-    sizeof(long long int));
+    graph->weight = (unsigned int*)calloc(nodeCnt * nodeCnt, 
+    sizeof(unsigned int));
 
     for (lines; lines < edgeCnt; lines++) {
         if (scanf("%d %d %lld", &start, &end, &weight) != 3) {
@@ -72,8 +72,8 @@ GRAPH *create(GRAPH *graph, int edgeCnt, int nodeCnt) {
         start--;
         end--;
 
-        graph->weight[nodeCnt * start + end] = weight;
-        graph->weight[nodeCnt * end + start] = weight;
+        graph->weight[nodeCnt * start + end] = (unsigned int)weight;
+        graph->weight[nodeCnt * end + start] = (unsigned int)weight;
     }
 
     if (flag == 0 && nodeCnt != 1){
@@ -85,19 +85,9 @@ GRAPH *create(GRAPH *graph, int edgeCnt, int nodeCnt) {
 }
 
 
-//free all structures
-void freeMemory(int *visited, int *frame, int *minEdges, GRAPH *graph){
-    free(visited);
-    free(frame);
-    free(minEdges);
-    free(graph->weight);
-    free(graph);
-}
-
-
 // find next min edge
 int minEdge(GRAPH *graph, int *visited, int *minEdge){
-    int min = INT_MAX, minInd;
+    unsigned int min = UINT_MAX, minInd;
 
     for (int i = 0; i < graph->nodeCnt; i++)
         if (!visited[i] && minEdge[i] < min) {
@@ -112,12 +102,12 @@ int minEdge(GRAPH *graph, int *visited, int *minEdge){
 // prim algoritm
 void prim(GRAPH* graph, int nodeCnt){
     int *visited = (int*)malloc(nodeCnt * sizeof(int)),
-    *minEdges = (int*)malloc(nodeCnt * sizeof(int)),
     *frame = (int*)malloc(nodeCnt * sizeof(int));
+    unsigned int *minEdges = (unsigned int*)malloc(nodeCnt * sizeof(unsigned int));
 
     for (int i = 0; i < nodeCnt; i++){
         visited[i] = 0;
-        minEdges[i] = INT_MAX;
+        minEdges[i] = UINT_MAX;
         frame[i] = -1;
     }
 
@@ -137,9 +127,11 @@ void prim(GRAPH* graph, int nodeCnt){
     }
 
     for (int i = nodeCnt; i > 0; i--)
-        if (minEdges[i] == INT_MAX){
+        if (minEdges[i] == UINT_MAX){
             printf("no spanning tree");
-            freeMemory(visited, frame, minEdges, graph);
+            free(visited);
+            free(frame);
+            free(minEdges);
             exit(0);
         }
 
@@ -150,12 +142,14 @@ void prim(GRAPH* graph, int nodeCnt){
             printf("%d %d\n", i + 1, frame[i]);
     }
 
-    freeMemory(visited, frame, minEdges, graph);
+    free(frame);
+    free(minEdges);
+    free(visited);
 }
 
 
 int main() {
-    int nodeCnt, edgeCnt, edgeLen;
+    int nodeCnt, edgeCnt;
     GRAPH *graph = NULL;
 
     scanf("%d", &nodeCnt);
@@ -167,6 +161,7 @@ int main() {
     graph = create(graph, edgeCnt, nodeCnt);
     prim(graph, nodeCnt);
 
+    free(graph->weight);
     free(graph);
     return 0;
 }
