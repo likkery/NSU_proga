@@ -4,7 +4,6 @@
 
 #define MAX_CNT 5000
 #define GRAPH struct graph
-#define MIN(i, j) (((i) < (j)) ? (i) : (j))
 
 
 GRAPH{
