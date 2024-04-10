@@ -73,7 +73,42 @@ GRAPH *create(GRAPH *graph, int edgeCnt, int nodeCnt) {
 
 //topological sort algoritm
 void topologicalSort(GRAPH *graph){
-    
+    int nodeCnt = graph->nodeCnt, front = 0, back = -1, ind = 0;
+    int *stack = (int*)malloc(nodeCnt * sizeof(int)),
+    *inDegree = (int*)calloc(nodeCnt, sizeof(int)),
+    *result = (int*)malloc(nodeCnt * sizeof(int));
+
+    for (int i = 0; i < nodeCnt; ++i)
+        for (int j = 0; j < nodeCnt; ++j)
+            if (graph->adjList[nodeCnt * i + j] != 0)
+                inDegree[j]++;
+
+    for (int i = 0; i < nodeCnt; ++i)
+        if (inDegree[i] == 0)
+            stack[++back] = i;
+
+    while (front <= back){
+        result[ind++] = stack[front++] + 1;
+        
+        for (int i = 0; i < nodeCnt; i++)
+            if (graph->adjList[nodeCnt * stack[front - 1] + i]){
+                inDegree[i]--;
+                if (inDegree[i] == 0)
+                    stack[++back] = i;
+            }
+    }
+
+    if (ind != nodeCnt){
+        printf("impossible to sort");
+        exit(0);
+    }
+
+    for (int i = 0; i < nodeCnt; i++)
+        printf("%d ", result[i]);
+
+    free(inDegree);
+    free(result);
+    free(stack);
 }
 
 
@@ -81,14 +116,16 @@ int main() {
     int nodeCnt, edgeCnt;
     GRAPH *graph = NULL;
 
-    scanf("%d", &nodeCnt);
-    scanf("%d", &edgeCnt);
+    if (scanf("%d", &nodeCnt) < 1 || scanf("%d", &edgeCnt) < 1){
+        printf("bad number of lines");
+        return 0;
+    }
 
     if (check(nodeCnt, edgeCnt))
         return 0;
 
     graph = create(graph, edgeCnt, nodeCnt);
-    prim(graph, nodeCnt);
+    topologicalSort(graph);
 
     free(graph->adjList);
     free(graph);
