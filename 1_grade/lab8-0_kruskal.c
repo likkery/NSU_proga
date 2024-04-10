@@ -75,7 +75,7 @@ GRAPH *create(GRAPH *edge, int edgeCnt, int nodeCnt) {
 }
 
 
-// check for errors constant data in the very beginning
+// check for errors in the constant data in the very beginning
 int check(int nodeCnt, int edgeCnt){
     if (nodeCnt < 0 || nodeCnt > MAX_CNT) {
         printf("bad number of vertices");
