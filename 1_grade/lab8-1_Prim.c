@@ -85,7 +85,7 @@ GRAPH *create(GRAPH *graph, int edgeCnt, int nodeCnt) {
 }
 
 
-// find next min edge
+// find the next min edge
 int minEdge(GRAPH *graph, int *visited, int *minEdge){
     unsigned int min = UINT_MAX, minInd;
 
