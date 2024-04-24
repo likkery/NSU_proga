@@ -164,7 +164,7 @@ void kosaraju(GRAPH *graph){
     }
 
     if (flag == graph->nodeCnt){
-        printf("no strongly connected components");
+        printf("every node is strongly connected component");
         exit(1);
     }
 
